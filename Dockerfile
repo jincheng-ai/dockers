@@ -28,9 +28,6 @@ ENV ROS_DISTRO="melodic"
 
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 
-ARG HTTP_PROXY="http://10.1.80.160:7890"
-ARG HTTPS_PROXY="http://10.1.80.160:7890"
-
 RUN sudo apt-get remove -y x264 libx264-dev
 RUN sudo apt-get install -yq \
     # for cuda
@@ -110,9 +107,8 @@ RUN sudo apt-get update -q
 # for ROS Melodic
 RUN sudo apt install -yq ros-${ROS_DISTRO}-desktop-full python-rosdep ros-${ROS_DISTRO}-tf-conversions ros-${ROS_DISTRO}-rviz
 
-RUN echo $HTTP_PROXY
-RUN HTTP_PROXY=$HTTP_PROXY && HTTPS_PROXY=$HTTPS_PROXY sudo rosdep init
-RUN HTTP_PROXY=$HTTP_PROXY && HTTPS_PROXY=$HTTPS_PROXY rosdep update
+RUN sudo rosdep init
+RUN rosdep update
 RUN echo 'source /opt/ros/${ROS_DISTRO}/setup.bash' >> ~/.bashrc
 RUN mkdir -p ~/catkin_ws/src && cd ~/catkin_ws/src
 RUN cd ~/catkin_ws/src && /bin/bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && catkin_init_workspace " 

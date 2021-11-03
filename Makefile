@@ -2,6 +2,7 @@
 USER := jincheng
 IMAGE := camera
 VERSION := latest
+PWD := $(shell pwd)
 
 .PHONY: all build-test build rebuild shell run test
 
@@ -39,7 +40,7 @@ shell-test:
 	docker run --rm -it --gpus all -e TZ=Asia/Shanghai $(USER)/$(IMAGE)-test:$(VERSION) bash
 
 shell-slam:
-	docker run --rm -it -p 7890:7890 --gpus all --privileged -v /dev/video0:/dev/video0  -e DISPLAY=unix$(DISPLAY) -e TZ=Asia/Shanghai -v /tmp/.X11-unix:/tmp/.X11-unix/ -v  /home/robot/codes/stabilizer:/home/ubuntu/staber $(USER)/$(IMAGE)-slam:$(VERSION) bash
+	docker run --rm -it -p 7890:7890 --gpus all --privileged -v /dev/video0:/dev/video0  -e DISPLAY=unix$(DISPLAY) -e TZ=Asia/Shanghai -v /tmp/.X11-unix:/tmp/.X11-unix/ -v  $(PWD)/:/home/ubuntu/workspace $(USER)/$(IMAGE)-slam:$(VERSION) bash
 
 # run
 run:
